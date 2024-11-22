@@ -19,6 +19,7 @@ class Monolith:
         self.screen = pygame.display.set_mode((screen_x, screen_y), FULLSCREEN | SCALED)
         self.columns = int((screen_x - (self.border_size * 2)) / self.font_size)
         self.rows = int((screen_y - (self.border_size * 2)) / self.font_size)
+        self.cursor_x, self.cursor_y = 0, 0
         self.running = True
 
     def run(self):
@@ -26,7 +27,11 @@ class Monolith:
         fps = 60
         while self.running:
             self.screen.fill(Color('cornflowerblue'))
-            self.print_at('Hello, World!', (0, 0))
+            self.cursor_y = 0
+            self.print_ln('One!')
+            self.print_ln('Two!')
+            self.print_ln('Three!')
+            self.print_at('Hello, World!', (10, 10))
             self.handle_events()            
             clock.tick(fps)
             pygame.display.flip()
@@ -39,6 +44,11 @@ class Monolith:
             elif event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
                     self.running = False
+
+    def print_ln(self, text):
+        self.print_at(text, (self.cursor_x, self.cursor_y))
+        self.cursor_x = 0
+        self.cursor_y += 1
 
     def print_at(self, text, position):
         graphical_pos = (self.border_size + (position[0] * self.font_size),
